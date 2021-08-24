@@ -1,0 +1,22 @@
+		</ComponentTemplates>
+    <DeletedComponentTemplates />
+    <Id>30000</Id>
+    <Name>@@@TEMPLATENAME@@@</Name>
+    <IsMockTemplate>false</IsMockTemplate>
+    <Description>@@@DESCRIPTION@@@</Description>
+    <Tags />
+    <Created>@@@CREATEDDATE@@@</Created>
+    <LastModified>@@@MODEIFIEDDATE@@@</LastModified>
+    <CustomApplicationType i:nil="true" />
+    <Version>6.2.476.0</Version>
+    <ViewID>0</ViewID>
+    <ViewXml i:nil="true" />
+    <ModuleVersion xmlns:d="http://schemas.datacontract.org/2004/07/System">
+      <d:_Build>5</d:_Build>
+      <d:_Major>2020</d:_Major>
+      <d:_Minor>2</d:_Minor>
+      <d:_Revision>17525</d:_Revision>
+    </ModuleVersion>
+    <UniqueId>@@@GUID@@@</UniqueId>
+  </ApplicationTemplate>
+</ArrayOfApplicationTemplate>
