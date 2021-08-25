@@ -314,7 +314,7 @@ If (!$Quiet) {
 	$Servers = $Servers | Out-GridView -OutputMode Multiple -Title 'Select any Servers you want to monitor applications on. Use Ctrl to pick multiple'
 }
 $SelectedServerCount = ($Servers.Server).count
-$ProgressServerCount = 1
+$ProgressServerCount = 0
 Send-LogMessage -Level '' -message "Number of Servers Selected: $SelectedServerCount"
 ForEach ($ServerItem In $Servers) {
 	$Server = $ServerItem.Server
@@ -370,7 +370,7 @@ ForEach ($ServerItem In $Servers) {
 	Write-Progress -Activity "$Server" -Status "Adding Services to XML" -PercentComplete $OverallPercentComplete
 	Send-LogMessage -Level '' -message "Adding Services to XML"
 	If (($SelectedServicesToMonitor.Name).count -eq 1) {
-		$TemplateOutputXML = $TemplateOutputXML + (Get-ServiceComponentXML -inputfile $ServiceXMLSource -ComponentName $ServicesSuggestedForMonitoring.DisplayName -ServiceName $ServicesSuggestedForMonitoring.Name)
+		$TemplateOutputXML = $TemplateOutputXML + (Get-ServiceComponentXML -inputfile $ServiceXMLSource -ComponentName $SelectedServicesToMonitor.DisplayName -ServiceName $SelectedServicesToMonitor.Name)
 		$ServiceDisaplayName = $ServicesSuggestedForMonitoring.DisplayName
 		Send-LogMessage -Level '' -message "Adding Service: $ServiceDisaplayName"
 	} ElseIf (($SelectedServicesToMonitor.Name).count -gt 1) {
@@ -385,10 +385,10 @@ ForEach ($ServerItem In $Servers) {
 	#$ports = 20, 21, 22, 23, 25, 53, 69, 80, 88, 389, 443, 445, 389, 1433, 1434, 3306, 5060, 5432
 	$ports = 20, 21, 80, 443, 389, 1433, 1434, 3306, 5060, 5432
 	Send-LogMessage -Level '' -message "Checking Common Ports"
-	Write-Progress -Activity "$Server" -Status "Checking Common Ports" -PercentComplete ($PortCount/$ports.Count) -PercentComplete $OverallPercentComplete
+	Write-Progress -Activity "$Server" -Status "Checking Common Ports" -PercentComplete $OverallPercentComplete
 	$ReportPorts = @()
 	$Ports | ForEach-Object {
-		Write-Progress -Activity "$Server" -Status "Checking Common Ports" -PercentComplete ($PortCount/$ports.Count) -PercentComplete $OverallPercentComplete
+		Write-Progress -Activity "$Server" -Status "Checking Common Ports" -PercentComplete $OverallPercentComplete
 		$port = $_; If (Test-NetConnection -ComputerName $Server -Port $Port -InformationLevel Quiet -WarningAction SilentlyContinue) {
 			$PortCount = $PortCount + 1
 			Switch ($port) {
