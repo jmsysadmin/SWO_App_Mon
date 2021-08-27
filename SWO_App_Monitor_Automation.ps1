@@ -21,7 +21,7 @@
 		Select where to pull server list from, can be 'CSV' or 'Orion'
 	.PARAMETER FilterForProduction 
 		Limits servers to nodes marked as 'Production'. Can be set to 'SKIP' to 
-		ignore the fitler, or set to the name of a custom property where the 
+		ignore the filter, or set to the name of a custom property where the 
 		value says "Production"
 	.PARAMETER ApplicationName
 		Can be set to 'SKIP' to ignore, or the custom property name that holds the application name on the server
