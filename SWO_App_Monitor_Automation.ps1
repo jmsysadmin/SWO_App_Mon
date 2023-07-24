@@ -35,7 +35,7 @@
 
 Param (
 	[String]
-	$OrionServerName = 'Orion',
+	$OrionServerName = 'h2pwswhcowc01.columbuschildrens.net',
 	# Assumes that script is running with rights to this server
 	
 	[Switch]
@@ -44,15 +44,15 @@ Param (
 	
 	[ValidateSet("CSV", "Orion")]
 	[String]
-	$ServerListSource = "CSV",
+	$ServerListSource = "Orion",
 	#Can Be 'CSV' or 'Orion'
 
 	[String]
-	$FilterForProduction = 'NodeUsedFor',
-	#Can be set to 'SKIP' to ignore the fitler, or the name of a custom property where the value says "Production"
+	$FilterForProduction = 'Environment',
+	#Can be set to 'SKIP' to ignore the filter, or the name of a custom property where the value says "Production"
 
 	[String]
-	$ApplicationName = 'Applications',
+	$ApplicationName = 'Application',
 	#Can be set to 'SKIP' to ignore, or the custom property name that holds the Application on the server
 
 	[ValidateSet("All", "Unmonitored")]
@@ -60,10 +60,10 @@ Param (
 	$TargetedServers = 'Unmonitored',
 	
 	[Boolean]
-	$ImportTemplateToOrion = $False,
+	$ImportTemplateToOrion = $True,
 	
 	[Boolean]
-	$AssignTemplateToNode = $False
+	$AssignTemplateToNode = $True
 )
 
 Write-Progress -Activity 'Gathering Data' -Status 'Loading functions' -PercentComplete -1 -id 0
@@ -157,21 +157,22 @@ Function Get-PortBasedComponentXML ($InputFolder, $PortNumber, $PortDescription)
 			$uniqueid = [GUID]::NewGuid().ToString()
 			$HttpsXML = $HttpsXML -replace "@@@GUID@@@", $uniqueid
 			
-			$script:ComponentCounter = $ComponentCounter + 1
-			$SSLCertInputFile = $InputFolder + '\SSLCert.txt'
-			$SSLCertXML = (Get-Content -path $SSLCertInputFile -Raw) -replace "@@@ComponentOrder@@@", $ComponentCounter
-			$uniqueid = [GUID]::NewGuid().ToString()
-			$SSLCertXML = $SSLCertXML -replace "@@@GUID@@@", $uniqueid
+			#$script:ComponentCounter = $ComponentCounter + 1
+			#$SSLCertInputFile = $InputFolder + '\SSLCert.txt'
+			#$SSLCertXML = (Get-Content -path $SSLCertInputFile -Raw) -replace "@@@ComponentOrder@@@", $ComponentCounter
+			#$uniqueid = [GUID]::NewGuid().ToString()
+			#$SSLCertXML = $SSLCertXML -replace "@@@GUID@@@", $uniqueid
 			
-			$HttpsOut = $HttpsXML + $SSLCertXML
+			$HttpsOut = $HttpsXML # + $SSLCertXML
 			Return $HttpsOut
 		}
 		default {
 			$InputFile = $InputFolder + '\Port.txt'
 			$script:ComponentCounter = $ComponentCounter + 1
-			$PortXML = (Get-Content -path $inputfile -Raw) -replace "@@@ComponentOrder@@@", $ComponentCounter
-			$PortXML = (Get-Content -path $inputfile -Raw) -replace "@@@Port@@@", $PortNumber
-			$PortXML = (Get-Content -path $inputfile -Raw) -replace "@@@PortDescription@@@", $PortDescription
+			$PortXML = (Get-Content -path $inputfile -Raw) 
+			$PortXML = $PortXML -replace "@@@ComponentOrder@@@", $ComponentCounter
+			$PortXML = $PortXML -replace "@@@Port@@@", $PortNumber
+			$PortXML = $PortXML -replace "@@@PortDescription@@@", $PortDescription
 			$uniqueid = [GUID]::NewGuid().ToString()
 			$PortXML = $PortXML -replace "@@@GUID@@@", $uniqueid
 			
@@ -187,8 +188,100 @@ Function Get-TrimmedServiceList ($Services) {
 			If ($templateservice.Name -like $Service.Name) {
 				$AddService = $False
 				Break
-			}
-			If ($Service.DisplayName -like 'Application Host Helper Service') {
+			} ElseIf ($Service.Name -like $templateservice.Name) {
+				$AddService = $False
+				Break
+			} ElseIf ($Service.DisplayName -like 'Application Host Helper Service') {
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'ASP.NET State Service*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'AzureAttestService*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Data Deduplication Volume Shadow Copy Service*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Connected User Experiences and Telemetry*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Commvault Client Manager Service*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Commvault Communications Service*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Commvault Network Daemon*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'SQL Server Integration Services*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'SQL Server Browser*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'SQL Server Agent*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'SQL Server CEIP*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'SQL Server Reporting Services*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'SQL Server VSS Writer*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Net Driver HPZ12*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Pml Driver HPZ12*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Windows Search*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Net.Msmq Listener Adapter*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Net.Tcp Port Sharing Service*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Net.Pipe Listener Adapter*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Net.Tcp Listener Adapter*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'DameWare Mini Remote Control*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'ASP.NET State Service*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Windows Audio*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Windows Update*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'IPsec Policy Agent*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'ControlUp Agent*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Application Experience*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Background Intelligent Transfer Service*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'DameWare Mini Remote Control*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Java Quick Starter*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'KtmRm for Distributed Transaction Coordinator*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'TCP/IP NetBIOS Helper*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Network List Service*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Plug and Play*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'IPsec Policy Agent*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Secondary Logon*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Centricity Clinical Gateway (CCG) Service Tools*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Software Licensing*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Tablet PC Input Service*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Terminal Services*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Desktop Window Manager Session Manager*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Windows Error Reporting Service*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Windows Update*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Device Association Service*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'ScreenConnect Client*') { 
 				$AddService = $False
 			} ElseIf ($Service.DisplayName -like 'SMS AntiMalware') {
 				$AddService = $False
@@ -216,11 +309,17 @@ Function Get-TrimmedServiceList ($Services) {
 				$AddService = $False
 			} ElseIf ($Service.DisplayName -like 'Performance Logs & Alerts') {
 				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'cbdhsvc_*') {
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'CDPUserSvc_*') {
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'WpnUserService_*') {
+				$AddService = $False			
 			}
 		}
 		If ($AddService) {
 			$NewlyInstalledServices += $Service
-		}
+		} 
 	}
 	Return $NewlyInstalledServices
 }
@@ -231,6 +330,15 @@ Send-LogMessage -Level '' -message $PSCommandPath
 Try {
 	Import-Module SwisPowerShell
 } Catch {
+	Send-LogMessage -Level 'Critical' -message "Message: $($Error[0])"
+	Exit 1;
+}
+
+$HCO_Credentials = Get-Credential
+$global:SwisConnection = $null
+$SwisConnection = Connect-Swis -Hostname $OrionServerName -credential $HCO_Credentials
+$TestQueryResults = Get-SwisData -SwisConnection $SwisConnection -Query "SELECT TOP 10 Caption, IPAddress, ObjectSubType FROM Orion.Nodes"
+If ($TestQueryResults.count -ne 10) {
 	Send-LogMessage -Level 'Critical' -message "Message: $($Error[0])"
 	Exit 1;
 }
@@ -274,23 +382,23 @@ If ($ServerListSource -eq "CSV") {
 		$ProdGroupBy = ""
 	} Else {
 		$ProdColumn = ", N.CustomProperties.$FilterForProduction as [NodeUsedFor]"
-		$ProdGroupBy = ", N.CustomProperties.$FilterForProduction"
+		$ProdGroupBy = "N.CustomProperties.$FilterForProduction"
 	}
 	If ($ApplicationName -like 'SKIP') {
 		$AppColumn = ""
 		$AppGroupBy = ""
 	} Else {
 		$AppColumn = ", N.CustomProperties.$ApplicationName as [Applications]"
-		$AppGroupBy = ", N.CustomProperties.$ApplicationName"
+		$AppGroupBy = "N.CustomProperties.$ApplicationName"
 	}
 	$OptionalColumns = $ProdColumn + $AppColumn
-	$OptionalGroupBy = $ProdGroupBy + $AppGroupBy
+	$OptionalGroupBy = ", $ProdGroupBy, $AppGroupBy"
 	$QueryServerList = "SELECT N.NodeID, N.caption as [Server], COUNT(N.Applications.ApplicationID) as [Monitors]$OptionalColumns 
-		FROM Orion.Nodes N Where N.Vendor like 'Windows' and N.IsServer = TRUE and N.CustomProperties.NodeUsedFor like 'Production' 
+		FROM Orion.Nodes N Where N.Vendor like 'Windows' and N.IsServer = TRUE and $ProdGroupBy like 'Production' and N.Caption not like '%wcxx%' and $AppGroupBy is not Null
 		Group By N.NodeID, N.caption$OptionalGroupBy"
 	Send-LogMessage -Level '' -message 'Importing Windows Servers from Orion'
 	Send-LogMessage -Level '' -message $QueryServerList
-	$Servers = Get-SwisData (Connect-Swis -Hostname $OrionServerName -Trusted) -Query $QueryServerList
+	$Servers = Get-SwisData ($SwisConnection) -Query $QueryServerList
 	If (($Servers.server).count -eq 0) {
 		Write-Progress -Activity 'Exiting Script' -Status 'No Servers Selected' -PercentComplete 100 -id 0
 		Send-LogMessage -Level '' -message 'No Servers imported from Orion SWIS Query, Exiting'
@@ -322,11 +430,14 @@ ForEach ($ServerItem In $Servers) {
 	if (!(Test-Connection -ComputerName $Server -Quiet)) {
 		Write-Progress -Activity "Connecting to $Server" -Status "$Server cannot be reached, skipping" -PercentComplete -1 -id 1
 		Send-LogMessage -Level 'Warning' -message "$Server cannot be reached, skipping"
-		Break 
+		continue 
 	}
-	$NodeUsedFor = $ServerItem.NodeUsedFor
+	
 	$Application = $ServerItem.Applications
+	Write-host $ServerItem
+
 	$OverallPercentComplete = ($ProgressServerCount/$SelectedServerCount) * 100
+	If ($OverallPercentComplete -gt 100){$OverallPercentComplete = 100}
 	Write-Progress -Activity 'Working server list' -Status "Starting $Server Application Template" -PercentComplete $OverallPercentComplete -id 0
 	Send-LogMessage -Level '' -message "Starting $Server Application Template"
 	$TemplateOutputXML = $null
@@ -350,7 +461,7 @@ ForEach ($ServerItem In $Servers) {
 	Switch ($EditExclustionsResponse) {
 		0 {
 			$ServicesToExclude = $ServicesSuggestedForMonitoring | Out-GridView -OutputMode Multiple -Title 'Select any services that should be excluded from future recommendations. Use Ctrl to pick multiple'
-			If ($ServicesToExclude -ge 1) {
+			If ($ServicesToExclude.count -ge 1) {
 				$ServicesToExclude.name | Add-Content -Path ($ScriptFolder + "\" + $OS.Caption + '_Services.csv')
 				$ServicesSuggestedForMonitoring = Get-TrimmedServiceList -Services $ServicesSuggestedForMonitoring
 			}
@@ -453,9 +564,9 @@ ForEach ($ServerItem In $Servers) {
 			$PortComponentsXML = $PortComponentsXML + (Get-PortBasedComponentXML -InputFolder $XMLSourceFolder -PortNumber $Port -PortDescription $PortDescription)
 			$ReportPorts += [pscustomobject]@{ 'Port Description' = $PortDescription; 'Port' = $Port
 			}
-			Send-LogMessage -Level '' -message "Adding Port monitor for $Port $PortDescription"
+			Send-LogMessage -Level 'Success' -message "Adding Port monitor for $Port $PortDescription"
 		} Else {
-			Send-LogMessage -Level '' -message "$Port is not listening, monitor skipped"
+			Send-LogMessage -Level 'Warning' -message "$Port is not listening, monitor skipped"
 		}
 	}
 	$ReportPortsHTML = $ReportPorts |  ConvertTo-Html  -Fragment -PreContent "<h2>Monitored Ports</h2>"
@@ -473,6 +584,16 @@ ForEach ($ServerItem In $Servers) {
 		$OutTemplateDescription = Read-Host -Prompt 'What do you want to set as the template description?'
 	}
 	
+	$FoundItemCount = 0
+	$FoundItemCount = (($SelectedServicesToMonitor.count) + ($ReportPorts.count))
+	If ($FoundItemCount -gt 0) {
+		Send-LogMessage -Level 'Success' -message "Template has $FoundItemCount services and ports for $Server" 
+		$ItemsFound = $True 
+	} else {
+		Send-LogMessage -Level 'Warning' -message "Template has $FoundItemCount services and ports, no template or assignment will happen for $Server" 	
+		$ItemsFound = $False 
+	}	
+	
 	$TemplateOutputXML = $TemplateOutputXML + (Get-ApplicationTemplateXMLEnd -inputfile $XMLEndFile -TemplateDisplayName $OutTemplateDisplayName -TemplateDescription $OutTemplateDescription)
 	[IO.Path]::GetinvalidFileNameChars() | ForEach-Object { $OutTemplateDisplayName = $OutTemplateDisplayName.Replace($_, "-") }
 	Send-LogMessage -Level '' -message "$OutTemplateDisplayName.apm-template file archived to the templates directory"
@@ -480,20 +601,26 @@ ForEach ($ServerItem In $Servers) {
 	Write-Progress -Activity "$Server" -Status "Creating Template XML File" -PercentComplete ($PortCount/$ports.Count) -id 1
 	
 	If (Test-Path $CreatedTemplateFile) { Remove-Item $CreatedTemplateFile }
-	New-Item -Path $CreatedTemplateFile -Value $TemplateOutputXML
-	If ($ImportTemplateToOrion) {
+	If($ItemsFound) { New-Item -Path $CreatedTemplateFile -Value $TemplateOutputXML }
+	If ($ImportTemplateToOrion -and $ItemsFound) {
 		Send-LogMessage -Level '' -message "$OutTemplateDisplayName will be imported to Orion"
-		$ImportResult = Invoke-SwisVerb -SwisConnection (Connect-Swis -Hostname $OrionServerName -Trusted) Orion.APM.ApplicationTemplate ImportTemplate @($TemplateOutputXML)
+		$ImportResult = Invoke-SwisVerb -SwisConnection ($SwisConnection) Orion.APM.ApplicationTemplate ImportTemplate @($TemplateOutputXML)
 		$ApplicationTemplateId = $ImportResult.InnerText
 		
-		[int]$NodeID = $Server.NodeID
+		Write-host "ApplicationTemplateID: $applicationTemplateId"
+
+		[int]$NodeID = $ServerItem.NodeID
+		Write-host "NodeID: $nodeID"
+
 		If ($AssignTemplateToNode -and ($nodeID -gt 0)) {
 			Send-LogMessage -Level '' -message 'Assigning Application Monitor with inherited credentials'
 			$CredentialSetId = -3
-			$ApplicationId = (Invoke-SwisVerb -SwisConnection (Connect-Swis -Hostname $OrionServerName -Trusted) "Orion.APM.Application" "CreateApplication" @($NodeID, $applicationTemplateId, $CredentialSetId, "false")).InnerText
+			
+			$ApplicationId = (Invoke-SwisVerb -SwisConnection ($SwisConnection) "Orion.APM.Application" "CreateApplication" @($NodeID, $applicationTemplateId, $CredentialSetId, "false")).InnerText
+			Write-host "Assignment output: $ApplicationId"
 			If ($ApplicationId -eq -1) {
 				Send-LogMessage -Level '' -message "Application wasn't created. Likely the template is already assigned to node and the skipping of duplications are set to 'true'."
-				Break
+				continue
 			} Else {
 				Send-LogMessage -Level '' -message "Application created with ID '$ApplicationId'."
 			}
@@ -507,7 +634,7 @@ ForEach ($ServerItem In $Servers) {
 	$HTMLReportPath = "$ScriptFolder\reports\$OutTemplateDisplayName-$Server.html"
 	If (Test-Path $HTMLReportPath) { Remove-Item $HTMLReportPath }
 	$HTMLReport | Out-File $HTMLReportPath
-	Send-LogMessage -Level '' -message "Starting Next Server"
+	Send-LogMessage -Level '' -message "Starting Next Server" 
 	$ProgressServerCount = $ProgressServerCount + 1
 }
 Send-LogMessage -Level '' -message "Script Completed"

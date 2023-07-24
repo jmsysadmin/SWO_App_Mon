@@ -1,0 +1,48 @@
+#TYPE Selected.System.Management.ManagementObject
+"ProcessName","CommandLine"
+"System Idle Process",
+"System",
+"smss.exe",
+"csrss.exe",
+"wininit.exe","wininit.exe"
+"csrss.exe",
+"winlogon.exe","winlogon.exe"
+"services.exe",
+"lsass.exe","C:\Windows\system32\lsass.exe"
+"svchost.exe","C:\Windows\system32\svchost.exe -k DcomLaunch"
+"svchost.exe","C:\Windows\system32\svchost.exe -k RPCSS"
+"dwm.exe","""dwm.exe"""
+"svchost.exe","C:\Windows\System32\svchost.exe -k LocalServiceNetworkRestricted"
+"svchost.exe","C:\Windows\system32\svchost.exe -k netsvcs"
+"svchost.exe","C:\Windows\system32\svchost.exe -k LocalService"
+"svchost.exe","C:\Windows\system32\svchost.exe -k NetworkService"
+"taskhost.exe","taskhost.exe /RuntimeWide"
+"svchost.exe","C:\Windows\system32\svchost.exe -k LocalServiceNoNetwork"
+"spoolsv.exe","C:\Windows\System32\spoolsv.exe"
+"svchost.exe","C:\Windows\System32\svchost.exe -k utcsvc"
+"svchost.exe","C:\Windows\System32\svchost.exe -k LocalSystemNetworkRestricted"
+"VGAuthService.exe","""C:\Program Files\VMware\VMware Tools\VMware VGAuth\VGAuthService.exe"""
+"vmtoolsd.exe","""C:\Program Files\VMware\VMware Tools\vmtoolsd.exe"""
+"svchost.exe","C:\Windows\System32\svchost.exe -k termsvcs"
+"svchost.exe","C:\Windows\system32\svchost.exe -k NetworkServiceNetworkRestricted"
+"dllhost.exe","C:\Windows\system32\dllhost.exe /Processid:{4577E84A-D861-44FC-8C99-6A592FB465C7}"
+"dllhost.exe","C:\Windows\system32\dllhost.exe /Processid:{02D4B3F1-FD88-11D1-960D-00805FC79235}"
+"msdtc.exe","C:\Windows\System32\msdtc.exe"
+"WmiPrvSE.exe","C:\Windows\system32\wbem\wmiprvse.exe"
+"VSSVC.exe","C:\Windows\system32\vssvc.exe"
+"ngentask.exe","""C:\Windows\Microsoft.NET\Framework\v4.0.30319\NGenTask.exe"" /RuntimeWide /StopEvent:420"
+"conhost.exe","\??\C:\Windows\system32\conhost.exe 0x4"
+"ngen.exe","""C:\Windows\Microsoft.NET\Framework\v4.0.30319\ngen.exe"" ExecuteQueuedItems /LegacyServiceBehavior"
+"WmiPrvSE.exe","C:\Windows\system32\wbem\wmiprvse.exe"
+"WmiApSrv.exe","C:\Windows\system32\wbem\WmiApSrv.exe"
+"taskhostex.exe","taskhostex.exe "
+"explorer.exe","C:\Windows\Explorer.EXE"
+"ServerManager.exe","""C:\Windows\system32\ServerManager.exe"" "
+"WmiPrvSE.exe","C:\Windows\system32\wbem\wmiprvse.exe"
+"TrustedInstaller.exe","C:\Windows\servicing\TrustedInstaller.exe"
+"TiWorker.exe","C:\Windows\winsxs\amd64_microsoft-windows-servicingstack_31bf3856ad364e35_6.3.9600.19496_none_fa14af899b481981\TiWorker.exe -Embedding"
+"vmtoolsd.exe","""C:\Program Files\VMware\VMware Tools\vmtoolsd.exe"" -n vmusr"
+"sppsvc.exe",
+"powershell.exe","""C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe"" ""-Command"" ""if((Get-ExecutionPolicy ) -ne 'AllSigned') { Set-ExecutionPolicy -Scope Process Bypass }; & 'C:\Users\Administrator\Desktop\JakeScript.ps1'"""
+"conhost.exe","\??\C:\Windows\system32\conhost.exe 0x4"
+"mscorsvw.exe",

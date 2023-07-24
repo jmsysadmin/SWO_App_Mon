@@ -1,0 +1,47 @@
+#TYPE Selected.System.Management.ManagementObject
+"ProcessName","CommandLine"
+"System Idle Process",
+"System",
+"smss.exe",
+"csrss.exe",
+"wininit.exe",
+"csrss.exe",
+"winlogon.exe","winlogon.exe"
+"services.exe",
+"lsass.exe","C:\Windows\system32\lsass.exe"
+"svchost.exe","C:\Windows\system32\svchost.exe -k DcomLaunch"
+"svchost.exe","C:\Windows\system32\svchost.exe -k RPCSS"
+"dwm.exe","""dwm.exe"""
+"svchost.exe","C:\Windows\System32\svchost.exe -k termsvcs"
+"svchost.exe","C:\Windows\System32\svchost.exe -k LocalSystemNetworkRestricted"
+"svchost.exe","C:\Windows\system32\svchost.exe -k LocalServiceNoNetwork"
+"svchost.exe","C:\Windows\System32\svchost.exe -k LocalServiceNetworkRestricted"
+"svchost.exe","C:\Windows\system32\svchost.exe -k netsvcs"
+"svchost.exe","C:\Windows\system32\svchost.exe -k LocalService"
+"svchost.exe","C:\Windows\system32\svchost.exe -k LocalServiceNetworkRestricted"
+"svchost.exe","C:\Windows\system32\svchost.exe -k NetworkService"
+"svchost.exe","C:\Windows\system32\svchost.exe -k NetworkServiceNetworkRestricted"
+"spoolsv.exe","C:\Windows\System32\spoolsv.exe"
+"svchost.exe","C:\Windows\system32\svchost.exe -k appmodel"
+"vmtoolsd.exe","""C:\Program Files\VMware\VMware Tools\vmtoolsd.exe"""
+"svchost.exe","C:\Windows\System32\svchost.exe -k smbsvcs"
+"VGAuthService.exe","""C:\Program Files\VMware\VMware Tools\VMware VGAuth\VGAuthService.exe"""
+"MsMpEng.exe",
+"dllhost.exe","C:\Windows\system32\dllhost.exe /Processid:{02D4B3F1-FD88-11D1-960D-00805FC79235}"
+"WmiPrvSE.exe","C:\Windows\system32\wbem\wmiprvse.exe"
+"msdtc.exe","C:\Windows\System32\msdtc.exe"
+"NisSrv.exe",
+"RuntimeBroker.exe","C:\Windows\System32\RuntimeBroker.exe -Embedding"
+"sihost.exe","sihost.exe"
+"taskhostw.exe","taskhostw.exe {222A245B-E637-4AE9-A93F-A59CA119A75E}"
+"explorer.exe","C:\Windows\Explorer.EXE"
+"ShellExperienceHost.exe","""C:\Windows\SystemApps\ShellExperienceHost_cw5n1h2txyewy\ShellExperienceHost.exe"" -ServerName:App.AppXtk181tbxbce2qsex02s8tw7hfxa9xb3t.mca"
+"SearchUI.exe","""C:\Windows\SystemApps\Microsoft.Windows.Cortana_cw5n1h2txyewy\SearchUI.exe"" -ServerName:CortanaUI.AppXa50dqqa5gqv4a428c9y1jjw7m3btvepj.mca"
+"ServerManager.exe","""C:\Windows\system32\ServerManager.exe"" "
+"WmiPrvSE.exe","C:\Windows\system32\wbem\wmiprvse.exe"
+"vmtoolsd.exe","""C:\Program Files\VMware\VMware Tools\vmtoolsd.exe"" -n vmusr"
+"svchost.exe","C:\Windows\system32\svchost.exe -k LocalServiceAndNoImpersonation"
+"svchost.exe","C:\Windows\system32\svchost.exe -k UnistackSvcGroup"
+"powershell_ise.exe","""C:\Windows\System32\WindowsPowerShell\v1.0\powershell_ise.exe"" ""C:\Users\Administrator\Desktop\PROD-FullAutoBuild.ps1"""
+"TrustedInstaller.exe","C:\Windows\servicing\TrustedInstaller.exe"
+"TiWorker.exe","C:\Windows\winsxs\amd64_microsoft-windows-servicingstack_31bf3856ad364e35_10.0.14393.3262_none_7f17456021e166da\TiWorker.exe -Embedding"

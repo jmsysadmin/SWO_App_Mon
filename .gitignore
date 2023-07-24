@@ -1,2 +1,6 @@
 
 SWO_App_Monitor_Automation.TempPoint.ps1
+logs/SWO_App_Automation__20211018.csv
+*.apm-template
+*.html
+logs/SWO_App_Automation__20220203.csv
