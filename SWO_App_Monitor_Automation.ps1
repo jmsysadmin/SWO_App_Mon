@@ -35,7 +35,7 @@
 
 Param (
 	[String]
-	$OrionServerName = 'h2pwswhcowc01.columbuschildrens.net',
+	$OrionServerName = 'hco.domain.com',
 	# Assumes that script is running with rights to this server
 	
 	[Switch]
