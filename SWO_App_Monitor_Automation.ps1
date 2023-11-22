@@ -1,4 +1,4 @@
-﻿<#	
+<#	
 	.NOTES
 	===========================================================================
 	 Created by:   	Jake Muszynski
@@ -35,7 +35,7 @@
 
 Param (
 	[String]
-	$OrionServerName = 'hco.domain.com',
+	$OrionServerName = 'HCO',
 	# Assumes that script is running with rights to this server
 	
 	[Switch]
@@ -157,6 +157,8 @@ Function Get-PortBasedComponentXML ($InputFolder, $PortNumber, $PortDescription)
 			$uniqueid = [GUID]::NewGuid().ToString()
 			$HttpsXML = $HttpsXML -replace "@@@GUID@@@", $uniqueid
 			
+
+			## Add a monitor for SSL Cert Expiration Date
 			#$script:ComponentCounter = $ComponentCounter + 1
 			#$SSLCertInputFile = $InputFolder + '\SSLCert.txt'
 			#$SSLCertXML = (Get-Content -path $SSLCertInputFile -Raw) -replace "@@@ComponentOrder@@@", $ComponentCounter
@@ -169,10 +171,9 @@ Function Get-PortBasedComponentXML ($InputFolder, $PortNumber, $PortDescription)
 		default {
 			$InputFile = $InputFolder + '\Port.txt'
 			$script:ComponentCounter = $ComponentCounter + 1
-			$PortXML = (Get-Content -path $inputfile -Raw) 
-			$PortXML = $PortXML -replace "@@@ComponentOrder@@@", $ComponentCounter
-			$PortXML = $PortXML -replace "@@@Port@@@", $PortNumber
-			$PortXML = $PortXML -replace "@@@PortDescription@@@", $PortDescription
+			$PortXML = (Get-Content -path $inputfile -Raw) -replace "@@@ComponentOrder@@@", $ComponentCounter
+			$PortXML = (Get-Content -path $inputfile -Raw) -replace "@@@Port@@@", $PortNumber
+			$PortXML = (Get-Content -path $inputfile -Raw) -replace "@@@PortDescription@@@", $PortDescription
 			$uniqueid = [GUID]::NewGuid().ToString()
 			$PortXML = $PortXML -replace "@@@GUID@@@", $uniqueid
 			
@@ -200,6 +201,8 @@ Function Get-TrimmedServiceList ($Services) {
 			} ElseIf ($Service.DisplayName -like 'Data Deduplication Volume Shadow Copy Service*') { 
 				$AddService = $False
 			} ElseIf ($Service.DisplayName -like 'Connected User Experiences and Telemetry*') { 
+				$AddService = $False
+			} ElseIf ($Service.DisplayName -like 'Recast Agent Service') { 
 				$AddService = $False
 			} ElseIf ($Service.DisplayName -like 'Commvault Client Manager Service*') { 
 				$AddService = $False
@@ -334,7 +337,7 @@ Try {
 	Exit 1;
 }
 
-$HCO_Credentials = Get-Credential
+$HCO_Credentials = Get-Credential -Message "Enter Solarwinds Credentials for $OrionServerName"
 $global:SwisConnection = $null
 $SwisConnection = Connect-Swis -Hostname $OrionServerName -credential $HCO_Credentials
 $TestQueryResults = Get-SwisData -SwisConnection $SwisConnection -Query "SELECT TOP 10 Caption, IPAddress, ObjectSubType FROM Orion.Nodes"
@@ -382,20 +385,20 @@ If ($ServerListSource -eq "CSV") {
 		$ProdGroupBy = ""
 	} Else {
 		$ProdColumn = ", N.CustomProperties.$FilterForProduction as [NodeUsedFor]"
-		$ProdGroupBy = "N.CustomProperties.$FilterForProduction"
+		$ProdGroupBy = ", N.CustomProperties.$FilterForProduction"
 	}
 	If ($ApplicationName -like 'SKIP') {
 		$AppColumn = ""
 		$AppGroupBy = ""
 	} Else {
 		$AppColumn = ", N.CustomProperties.$ApplicationName as [Applications]"
-		$AppGroupBy = "N.CustomProperties.$ApplicationName"
+		$AppGroupBy = ", N.CustomProperties.$ApplicationName"
 	}
 	$OptionalColumns = $ProdColumn + $AppColumn
-	$OptionalGroupBy = ", $ProdGroupBy, $AppGroupBy"
+	$OptionalGroupBy = $ProdGroupBy + $AppGroupBy
 	$QueryServerList = "SELECT N.NodeID, N.caption as [Server], COUNT(N.Applications.ApplicationID) as [Monitors]$OptionalColumns 
-		FROM Orion.Nodes N Where N.Vendor like 'Windows' and N.IsServer = TRUE and $ProdGroupBy like 'Production' and N.Caption not like '%wcxx%' and $AppGroupBy is not Null
-		Group By N.NodeID, N.caption$OptionalGroupBy"
+		FROM Orion.Nodes N Where N.Vendor like 'Windows' and N.IsServer = TRUE and N.CustomProperties.Environment like 'Production' 
+		Group By N.NodeID, N.caption$OptionalGroupBy ORDER BY N.NodeID DESC"
 	Send-LogMessage -Level '' -message 'Importing Windows Servers from Orion'
 	Send-LogMessage -Level '' -message $QueryServerList
 	$Servers = Get-SwisData ($SwisConnection) -Query $QueryServerList
@@ -432,7 +435,7 @@ ForEach ($ServerItem In $Servers) {
 		Send-LogMessage -Level 'Warning' -message "$Server cannot be reached, skipping"
 		continue 
 	}
-	
+
 	$Application = $ServerItem.Applications
 	Write-host $ServerItem
 
@@ -493,8 +496,8 @@ ForEach ($ServerItem In $Servers) {
 	}
 	$PortComponentsXML = $null
 	$PortCount = 0
-	#$ports = 20, 21, 22, 23, 25, 53, 69, 80, 88, 389, 443, 445, 389, 1433, 1434, 3306, 5060, 5432
-	$ports = 20, 21, 80, 443, 389, 1433, 1434, 3306, 5060, 5432
+	$ports = 20, 21, 22, 23, 25, 53, 69, 80, 88, 389, 443, 445, 389, 1433, 1434, 3306, 5060, 5432
+	#$ports = 80, 443, 1433 ### use this if you just want SQL and HTTP(S)
 	Send-LogMessage -Level '' -message "Checking Common Ports"
 	Write-Progress -Activity "$Server" -Status "Checking Common Ports" -PercentComplete $OverallPercentComplete
 	$ReportPorts = @()
